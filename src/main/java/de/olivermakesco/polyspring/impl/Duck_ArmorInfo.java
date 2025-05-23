@@ -6,4 +6,5 @@ import net.minecraft.world.item.equipment.ArmorType;
 public interface Duck_ArmorInfo {
     ArmorType polyspring$getArmorType();
     ArmorMaterial polyspring$getArmorMaterial();
+    ItemType polyspring$getItemType();
 }

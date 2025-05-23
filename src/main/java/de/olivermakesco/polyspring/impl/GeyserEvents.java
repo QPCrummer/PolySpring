@@ -57,8 +57,9 @@ public class GeyserEvents implements EventRegistrar {
 
             DataComponentMap components = item.components();
 
-            if (item instanceof Duck_ArmorInfo armor) {
-                switch (armor.polyspring$getArmorType()) {
+
+            if (isArmor((Duck_ArmorInfo) item)) {
+                switch (((Duck_ArmorInfo) item).polyspring$getArmorType()) {
                     case HELMET -> {
                         data.hat(true);
                         data.armorType("helmet");
@@ -68,21 +69,24 @@ public class GeyserEvents implements EventRegistrar {
                     case BOOTS -> data.armorType("boots");
                     case BODY -> data.armorType("body");
                 }
-                data.protectionValue(armor.polyspring$getArmorMaterial().defense().get(armor.polyspring$getArmorType()));
+                data.protectionValue(((Duck_ArmorInfo) item).polyspring$getArmorMaterial().defense().get(((Duck_ArmorInfo) item).polyspring$getArmorType()));
             }
 
-            if (item instanceof Duck_ToolMaterialInterface tool) {
+            if (isTool((Duck_ToolMaterialInterface) item)) {
                 data.displayHandheld(true);
 
-                switch (item) {
-                    case PickaxeItem pickaxeItem -> data.toolType("pickaxe");
-                    case AxeItem axeItem -> data.toolType("axe");
-                    case HoeItem hoeItem -> data.toolType("hoe");
-                    case SwordItem swordItem -> data.toolType("sword");
-                    default -> data.toolType("shovel");
+                switch (((Duck_ToolMaterialInterface) item).polyspring$getItemType()) {
+                    case ItemType.Pickaxe -> data.toolType("pickaxe");
+                    case ItemType.Axe -> data.toolType("axe");
+                    case ItemType.Hoe -> data.toolType("hoe");
+                    case ItemType.Sword -> data.toolType("sword");
+                    case ItemType.Shovel -> data.toolType("shovel");
+                    case ItemType.ToolOther -> {
+                        // Unknown tool type
+                    }
                 }
 
-                ToolMaterial material = tool.polyspring$getToolMaterial();
+                ToolMaterial material = ((Duck_ToolMaterialInterface) item).polyspring$getToolMaterial();
                 if (material.equals(ToolMaterial.WOOD)) {
                     data.toolTier("wood");
                 } else if (material.equals(ToolMaterial.STONE)) {
@@ -116,6 +120,14 @@ public class GeyserEvents implements EventRegistrar {
 
             event.register(data.build());
         }
+    }
+
+    private boolean isArmor(Duck_ArmorInfo armor) {
+        return armor.polyspring$getArmorMaterial() != null;
+    }
+
+    private boolean isTool(Duck_ToolMaterialInterface tool) {
+        return tool.polyspring$getToolMaterial() != null;
     }
 
     @Subscribe

@@ -4,4 +4,5 @@ import net.minecraft.world.item.ToolMaterial;
 
 public interface Duck_ToolMaterialInterface {
     ToolMaterial polyspring$getToolMaterial();
+    ItemType polyspring$getItemType();
 }
